@@ -1,0 +1,7 @@
+<Image
+  src={image || 'https://via.placeholder.com/400'} // Use placeholder if the image is invalid
+  alt={title || 'Blog Image'}
+  width={400}
+  height={400}
+  className="border-b rounded-t-md"
+/>
