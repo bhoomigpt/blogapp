@@ -1,23 +1,36 @@
-import { ConnectDB } from "@/lib/config/db";
-import EmailModel from "@/lib/models/EmailModel";
+// app/api/email/route.js
+
+import { ConnectDB } from "@/lib/config/db"; // Update this path if needed
+import EmailModel from "@/lib/models/EmailModel"; // Update this path if needed
 import { NextResponse } from "next/server";
 
-// pages/api/email.js
+export async function POST(req) {
+  try {
+    // Parse the request body as JSON
+    const { email } = await req.json();
 
-export default async function handler(req, res) {
-    if (req.method === 'POST') {
-      const { email } = req.body;
-      
-      if (!email) {
-        return res.status(400).json({ success: false, msg: 'Email is required' });
-      }
-  
-      // Simulate a successful subscription process (e.g., send email, store in DB, etc.)
-      // Replace this with actual logic, such as calling an email service or database.
-  
-      return res.status(200).json({ success: true, msg: 'Subscribed successfully!' });
-    } else {
-      res.status(405).json({ success: false, msg: 'Method Not Allowed' });
+    if (!email) {
+      return NextResponse.json(
+        { success: false, msg: "Email is required" },
+        { status: 400 }
+      );
     }
+
+    // Connect to the database
+    await ConnectDB();
+
+    // Save email to the database
+    const newEmail = new EmailModel({ email });
+    await newEmail.save();
+
+    return NextResponse.json(
+      { success: true, msg: "Subscribed successfully!" },
+      { status: 200 }
+    );
+  } catch (error) {
+    return NextResponse.json(
+      { success: false, msg: "Server error", error: error.message },
+      { status: 500 }
+    );
   }
-  
+}

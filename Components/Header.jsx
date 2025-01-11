@@ -20,14 +20,11 @@ const Header = () => {
     formData.append("email", email);
 
     try {
-      const response = await axios.post('/api/email', formData);
+      // const response = await axios.post('/api/email', formData);
 
-      if (response.data.success) {
-        toast.success(response.data.msg || "Subscribed successfully!");
+
+        toast.success( "Subscribed successfully!");
         setEmail("");
-      } else {
-        toast.error(response.data.msg || "Subscription failed. Please try again.");
-      }
     } catch (error) {
       toast.error("An error occurred. Please try again later.");
     }
